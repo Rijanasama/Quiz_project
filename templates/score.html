@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result page</title>
+    <style>
+        body {
+          font-family: sans-serif;
+          background-color: #f2f2f2;
+        }
+
+        hr {
+          margin: 20px 0;
+          border-top: 2px solid #ccc;
+        }
+
+        p {
+          font-size: 20px;
+          font-weight: bold;
+        }
+
+        input[type=submit] {
+          background-color: #5cb85c;
+          padding: 10px 20px;
+          font-size: 18px;
+          margin-top: 20px;
+          border: none;
+          border-radius: 5px;
+          box-shadow: 0 0 10px #5cb85c;
+          color: #fff;
+        }
+
+        #app1 {
+          background-color: #4CAF50;
+          color: white;
+          text-align: right;
+          padding: 10px;
+        }
+
+        #app1 p {
+          display: inline-block;
+          margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #app1 a {
+          color: blue;
+          text-decoration: underline;
+          font-weight: bold;
+          margin-left: 20px;
+        }
+
+        #app1 a:hover {
+          text-decoration: underline;
+        }
+        #pastscore {
+            background-color: #f5f5f5;
+            border: 10px solid #4CAF50;
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px 0px #888;
+        }
+
+        #pastscore h1 {
+            font-size: 28px;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        #pastscore p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        /* Style the average section */
+        #avg , #message {
+            background-color: #fff;
+            border: 10px solid #4CAF50;
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px 0px #888;
+        }
+
+        #avg h2 {
+            font-size: 24px;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        #avg p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+    </style>
+</head>
+<body>
+<div id="app1">
+    {% for row in data %}
+        {% if forloop.counter == 1 %}
+        <p>Welcome, {{ row.username }}!</p>
+        {% endif %}
+{% endfor %}
+    <a href="{% url 'logout' %}">Log out</a>
+</div>
+
+<div id="message">
+
+    {% for row in data %}
+            {% if forloop.last %}
+                <h1>You quiz score is: {{ row.mark }}</h1>
+                {% if row.mark == 0 or row.mark == 1 or row.mark == 2 %}
+                    <p>Please <a href="{% url 'quiz' %}"> try again!</a>!</p>
+  {% elif row.mark == 3 %}
+    <p>Good job!</p>
+  {% elif row.mark == 4 %}
+    <p>Excellent work!</p>
+  {% elif row.mark == 5 %}
+    <p>You are a genius!</p>
+                    {% endif %}
+
+    {% endif %}
+        {% endfor %}
+</div>
+
+<div id="pastscore">
+<h1>You past Score:</h1>
+        {% for row in data %}
+            <p>Test#{{ forloop.counter }}: {{ row.mark }}</p>
+        {% endfor %}
+</div>
+
+<div id="avg">
+    <h2><p>Your average score is {{ avg|floatformat:2 }}</p></h2>
+    <h2><p>Your minimum score is {{ min_score }}</p></h2>
+    <h2><p>Your maximum score is {{ max_score }}</p></h2>
+</div>
+
+<script>
+    let url1=window.location.href
+    if (url1.indexOf('?score=') !== -1) {
+  window.location.replace('/score/');
+}
+
+</script>
+</body>
+</html>

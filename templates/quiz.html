@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Page</title>
+
+    <style>
+
+
+        body {
+          font-family: sans-serif;
+          background-color: #f2f2f2;
+        }
+
+        .container {
+          max-width: 800px;
+          margin: 0 auto;
+          border: 2px solid #5cb85c;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px #5cb85c;
+        }
+
+        .col-md-6 {
+          width: 50%;
+          margin: 0 auto;
+        }
+
+        hr {
+          margin: 20px 0;
+          border-top: 2px solid #ccc;
+        }
+
+        p {
+          font-size: 20px;
+          font-weight: bold;
+        }
+
+        input[type=submit] {
+          background-color: #5cb85c;
+          padding: 10px 20px;
+          font-size: 18px;
+          margin-top: 20px;
+          border: none;
+          border-radius: 5px;
+          box-shadow: 0 0 10px #5cb85c;
+          color: #fff;
+        }
+
+        #app1 {
+          background-color: #4CAF50;
+          color: white;
+          text-align: right;
+          padding: 10px;
+        }
+
+        #app1 p {
+          display: inline-block;
+          margin: 0;
+        }
+
+        #app1 a {
+          color: blue;
+          text-decoration: underline;
+          font-weight: bold;
+          margin-left: 20px;
+        }
+
+        #app1 a:hover {
+          text-decoration: underline;
+        }
+         #timer {
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+             color: #f00;
+
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="app1">
+  <p>Welcome, {{ username }}!</p>
+    <a href="log_out">Log Out</a>
+</div>
+
+<div id="timer">
+
+</div>
+<div id="app">
+    <div class="container mt-5 pt-5">
+        <div class="col-md-6 mx-auto">
+            <div v-for="(question, index) in questions" v-if="index < 5">
+            <hr>
+            <p>[[question.question]]</p>
+            <div class="form-check" v-for="ans in question.Answer">
+  <input @change="storeAnswer($event,question.uid)" :value="ans.options" :class="'form-check-input'+index" type="radio" :name="'flexRadioDefault'+index" :id="'flexRadioDefault'+index">
+  <label :class="'form-check-label'+index" :for="'flexRadioDefault'+index">
+    [[ans.options]]
+  </label>
+</div>
+            <hr>
+                </div>
+            <input @click="submitQuiz()" type="submit" value="Submit">
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+
+
+
+<script>
+
+
+    var app=new Vue({
+  el: '#app',
+  delimiters: ['[[', ']]'],
+  data() {
+    return {
+      questions:[],
+        useranswers:{},
+        score: 0,
+
+    }
+  },
+        methods : {
+      getquestion(){
+          fetch('/api/get-quiz/')
+              .then(response=>response.json())
+              .then(result=>{
+                  this.questions=result.data
+              })
+
+      },storeAnswer(event,id){
+          this.useranswers[id]=event.target.value;
+            }
+            ,
+            submitQuiz() {
+          for(let key in this.useranswers) {
+              this.questions.map(question => {
+                  if (question.uid == key) {
+                      for (var i = 0; i < question.Answer.length; i++) {
+                          if (question.Answer[i].options == this.useranswers[key]) {
+                              if (question.Answer[i].is_correct_option) {
+                                  this.score++;
+                              }
+                          }
+                      }
+                  }
+              })
+          }
+
+                let url = '/score/?score=' + this.score;
+                window.location.replace(url);
+            }
+        },
+  created() {
+      this.getquestion()
+
+  },
+});
+</script>
+<script>
+  var timeLeft = 60;  //timer in secods
+
+  function countdown() {
+    if (timeLeft == 0) {
+      app.submitQuiz(); // submit the quiz
+    } else {
+      var minutes = Math.floor(timeLeft / 60);
+      var seconds = timeLeft % 60;
+      var display = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+      document.getElementById("timer").innerHTML = "Time Remaining "+display;
+      timeLeft--;
+      setTimeout(countdown, 1000);
+    }
+  }
+
+  countdown(); // start the countdown
+</script>
+
+</body>
+</html>

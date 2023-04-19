@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+        }
+        .container {
+            width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px #888;
+        }
+        .alert {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .timer {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+{% block content %}
+    <div class="container">
+        {% if msg %}
+            <div class="alert alert-danger">{{ msg }}</div>
+        {% else %}
+            <div class="alert alert-success">You have been logged out successfully!</div>
+        {% endif %}
+
+        <div class="timer">Redirecting in <span id="countdown">5</span> seconds...</div>
+
+        <script>
+            var seconds = 5;
+            var countdown = setInterval(function() {
+                seconds--;
+                document.getElementById("countdown").innerHTML = seconds;
+                if (seconds == 0) {
+                    clearInterval(countdown);
+                    window.location.href = "{% url 'login' %}";
+                }
+            }, 1000);
+        </script>
+    </div>
+{% endblock %}
+</body>
+</html>
