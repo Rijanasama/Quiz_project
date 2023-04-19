@@ -10,7 +10,10 @@ Before you can run this project, you need to have the following software install
 
 ### Installation
 1. Clone this repository to your local machine:
-git clone https://github.com/Rijanasama/Quiz_project.git
+  ```
+  git clone https://github.com/Rijanasama/Quiz_project.git
+  ```
+
 2. Change into the project directory:
 cd Quiz-project
 3. Create a virtual environment:
@@ -27,7 +30,9 @@ python -m venv venv
   ```
 
 5. Install the project dependencies:
-pip install -r requirements.txt
+  ```
+   pip install -r requirements.txt
+  ```
 
 ### Usage
 To run the project, run the following command in your terminal while in the project directory:
