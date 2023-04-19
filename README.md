@@ -15,9 +15,14 @@ Before you can run this project, you need to have the following software install
   ```
 
 2. Change into the project directory:
-cd Quiz-project
+  ```
+  cd Quiz-project
+  ```
+
 3. Create a virtual environment:
+  ```
 python -m venv venv
+  ```
 
 4. Activate the virtual environment:
 - On Windows:
@@ -36,7 +41,9 @@ python -m venv venv
 
 ### Usage
 To run the project, run the following command in your terminal while in the project directory:
+  ```
 python manage.py runserver
+  ```
 
 
 Then open your web browser and go to http://127.0.0.1:8000/ to see the project in action.
