@@ -16,7 +16,7 @@ Before you can run this project, you need to have the following software install
 
 2. Change into the project directory:
   ```
-  cd Quiz-project
+  cd Quiz_project
   ```
 
 3. Create a virtual environment:
