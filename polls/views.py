@@ -49,6 +49,7 @@ def get_marks(request):
         msg = "You must be logged in to view this page."
         return render(request, 'error.html', {'msg': msg})
 
+
 @login_required
 def get_quiz(request):
     try:
