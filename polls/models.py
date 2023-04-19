@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User
 import random
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     marks=models.IntegerField(default=1)
@@ -30,5 +30,6 @@ class Choice(models.Model):
 
 class Marks(models.Model):
     user=models.CharField(max_length=200)
-    score=models.IntegerField(default=0)
+    score=models.IntegerField(default=0,validators=[MinValueValidator(0), MaxValueValidator(5)])
+
 

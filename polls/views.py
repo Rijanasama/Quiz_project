@@ -14,32 +14,40 @@ def index(request):
 
 
 def get_marks(request):
-    if(request.GET):
-        username = request.user.username
-        score = request.GET.get('score')
-        Marks.objects.create(user=username, score=score)
+    if request.user.is_authenticated:
+        if(request.GET):
+            username = request.user.username
+            score = int(request.GET.get('score'))
+            if 0 <= score <= 5:
+                Marks.objects.create(user=username, score=score)
+            else:
+                msg = "There is some error in marks .So Try again"
+                return render(request, 'error.html', {'msg': msg})
 
-    marks = Marks.objects.all()
-    data= []
-    for mark in marks:
-        if request.user.username==mark.user:
-            data.append({
-                "username":request.user.username,
-                "mark": mark.score
-            })
-    if not data:
-       return render(request,'score.html')
-    marks1 = Marks.objects.filter(user=request.user.username)
-    avg = marks1.aggregate(Avg('score'))['score__avg']
-    min_score = marks1.aggregate(Min('score'))['score__min']
-    max_score = marks1.aggregate(Max('score'))['score__max']
-    context = {
-        "data": data,
-        "avg": avg,
-        "min_score": min_score,
-        "max_score": max_score,
-    }
-    return render(request, 'score.html', context)
+        marks = Marks.objects.all()
+        data= []
+        for mark in marks:
+            if request.user.username==mark.user:
+                data.append({
+                    "username":request.user.username,
+                    "mark": mark.score
+                })
+        if not data:
+           return render(request,'score.html')
+        marks1 = Marks.objects.filter(user=request.user.username)
+        avg = marks1.aggregate(Avg('score'))['score__avg']
+        min_score = marks1.aggregate(Min('score'))['score__min']
+        max_score = marks1.aggregate(Max('score'))['score__max']
+        context = {
+            "data": data,
+            "avg": avg,
+            "min_score": min_score,
+            "max_score": max_score,
+        }
+        return render(request, 'score.html', context)
+    else:
+        msg = "You must be logged in to view this page."
+        return render(request, 'error.html', {'msg': msg})
 
 @login_required
 def get_quiz(request):
