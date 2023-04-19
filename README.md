@@ -7,6 +7,8 @@ Before you can run this project, you need to have the following software install
 
 Python 3.10.8 or newer
 Django 4.2 or newer
+
+
 Installation
 Clone this repository to your local machine
 
