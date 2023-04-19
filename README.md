@@ -9,12 +9,12 @@ Python 3.10.8 or newer
 Django 4.2 or newer
 
 
-Installation
+#Installation
 Clone this repository to your local machine
 
 git clone https://github.com/Rijanasama/Quiz_project.git
 
-Change into the project directory
+#Change into the project directory
 cd Quiz-project
 
 Create a virtual environment
